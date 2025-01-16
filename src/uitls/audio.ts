@@ -80,6 +80,6 @@ export const convertWebmToWav = async (
   );
   return {
     wavBlob: new Blob([wavBuffer], { type: "audio/wav" }),
-    l16Blob: new Blob([wavBuffer], { type: "audio/l16" }),
+    l16Blob: new Blob([l16Buffer], { type: "audio/l16" }),
   };
 };
