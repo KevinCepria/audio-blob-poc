@@ -41,7 +41,35 @@ const App = () => {
     setBlob(wavBlob);
   };
 
-  const sendAudioBlob = () => {
+  const sendAudioBlobToApi = async () => {
+    if (!blob) return;
+    try {
+      // Create a FormData object and append the blob
+      const formData = new FormData();
+      formData.append("audioFile", blob);
+
+      // Send the request to the API using fetch
+      const response = await fetch("url", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${"token"}`, // Bearer Token in the Authorization header
+        },
+        body: formData, // Form data contains the Blob
+      });
+
+      // Handle the response
+      if (response.ok) {
+        const result = await response.json(); // Parse the response body as JSON
+        console.log("File uploaded successfully:", result);
+      } else {
+        console.error("Upload failed:", response.status, await response.text());
+      }
+    } catch (error) {
+      console.error("Error while sending the Blob:", error);
+    }
+  };
+
+  const sendAudioBlobToWS = () => {
     if (
       websocketRef.current &&
       websocketRef.current.readyState === WebSocket.OPEN &&
@@ -69,8 +97,10 @@ const App = () => {
         <>
           <audio src={URL.createObjectURL(blob)} controls={true} />
           <div className="action-container">
-            <button onClick={sendAudioBlob}>Send To WS</button>
-            <button>Send To REST API</button>
+            <button onClick={sendAudioBlobToWS}>Send To WS</button>
+            <button onClick={async () => await sendAudioBlobToApi()}>
+              Send To REST API
+            </button>
           </div>
         </>
       )}
