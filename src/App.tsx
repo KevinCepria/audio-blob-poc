@@ -7,7 +7,7 @@ const App = () => {
 
   const addAudioElement = async (blob: Blob) => {
     const { wavBlob, l16Blob } = await convertWebmToWav(blob);
-    setBlob(wavBlob);
+    setBlob(l16Blob);
   };
 
   const sendAudioBlobToApi = async () => {
